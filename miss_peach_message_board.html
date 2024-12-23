@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桃子小姐的留言板</title>
+    <style>
+        body {
+            background-color: #FEE0E6; 
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            color: #FF5C8D;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #FF5C8D;
+            margin: 20px 0;
+        }
+
+        form {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #FF5C8D;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1.1em;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #FF5C8D;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FF3D69;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: #DFF2BF;
+            color: #4F8A10;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        footer {
+            font-size: 1em;
+            color: #FF5C8D;
+            margin-top: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>桃子小姐的留言板</h1>
+    <p>欢迎留下你的留言，我会仔细阅读每一条并且给出回复。但请不要留下伤人的话</p>
+
+    <form id="contact-form">
+        <label for="name">昵称：</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="email">电子邮件（如果你不需要回复，请填写123@123.com）</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="message">想对桃子说的话：</label><br>
+        <textarea id="message" name="message" rows="5" required></textarea><br>
+
+        <button type="submit">提交留言</button>
+    </form>
+
+    <div class="success-message">成功留言啦！祝你天天开心！</div>
+
+    <footer>
+        <p>&copy; 2024 桃子小姐的留言板</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        const successMessage = document.querySelector('.success-message');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // 收集表单数据
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message'),
+            };
+
+            // 替换为你的 Google Apps Script 部署的 Web 应用程序 URL
+            const scriptURL = '你的 Google Apps Script 部署 URL';
+
+            // 发送数据到 Google Apps Script
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (response.ok) {
+                    successMessage.style.display = 'block';
+                    form.reset();
+                } else {
+                    alert('留言提交失败，请稍后再试！');
+                }
+            })
+            .catch(error => {
+                alert('发生错误：' + error.message);
+            });
+        });
+    </script>
+
+</body>
+</html>
